@@ -540,6 +540,8 @@ class Form
         
         $html .= '</select>';
         
+        $name = $this->nameToNotation($name);
+        
         return $this->getMessage($name).$html;
     }
     
