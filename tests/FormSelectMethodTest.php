@@ -334,9 +334,15 @@ class FormSelectMethodTest extends TestCase
         
         $form->messages()->add(
             level: 'error',
+            message: 'Error colors message.',
+            key: 'colors',
+        );
+        
+        $form->messages()->add(
+            level: 'error',
             message: 'Error size message.',
             key: 'options.size',
-        );        
+        );   
         
         $this->assertSame(
             '<span class="form-message error">Error color message.</span><select name="color" id="color"><option value="red">Red</option><option value="blue">Blue</option></select>',
@@ -345,6 +351,14 @@ class FormSelectMethodTest extends TestCase
                 items: ['red' => 'Red', 'blue' => 'Blue'],
             )
         );
+        
+        $this->assertSame(
+            '<span class="form-message error">Error colors message.</span><select name="colors[]" id="colors"><option value="red">Red</option><option value="blue">Blue</option></select>',
+            $form->select(
+                name: 'colors[]',
+                items: ['red' => 'Red', 'blue' => 'Blue'],
+            )
+        );        
                 
         $this->assertSame(
             '<span class="form-message error">Error size message.</span><select name="options[size]" id="options_size"><option value="red">Red</option><option value="blue">Blue</option></select>',
