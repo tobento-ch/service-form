@@ -204,5 +204,24 @@ class FormInputMethodTest extends TestCase
                 name: 'options.size',
             )
         );
-    }    
+    }
+    
+    public function testMessagesShouldNotBeRenderedIfHiddenInputType()
+    {
+        $form = new Form();
+        
+        $form->messages()->add(
+            level: 'error',
+            message: 'Error color message.',
+            key: 'color',
+        );
+        
+        $this->assertSame(
+            '<input name="color" type="hidden">',
+            $form->input(
+                name: 'color',
+                type: 'hidden',
+            )
+        );
+    }
 }
