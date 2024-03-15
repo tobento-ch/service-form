@@ -292,6 +292,10 @@ class Form
             $attributes['value'] = $value;
         }
         
+        if ($type === 'hidden') {
+            return '<input'.$this->formatAttributes($attributes).'>';
+        }
+        
         return $this->getMessage($name).'<input'.$this->formatAttributes($attributes).'>';
     }
 
