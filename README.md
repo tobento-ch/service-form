@@ -33,6 +33,7 @@ Buliding HTML forms.
     - [Method Spoofing](#method-spoofing)
     - [Active Form Elements](#active-form-elements)
     - [Form Helper Methods](#form-helper-methods)
+    - [JavaScript Validation](#javascript-validation)
 - [Credits](#credits)
 ___
 
@@ -1054,6 +1055,104 @@ $form = new Form();
 
 var_dump($form->hasArrayNotation('user.firstname'));
 // bool(true)
+```
+
+## JavaScript Validation
+
+You may use the validation.js for adding custom messages for your form elements when using validation attributes.
+
+### Import File
+
+```html
+<script src="validation.js" type="module"></script>
+```
+
+### Validation
+
+Use the ```data-validation-messages``` attribute to specify messages for specific validation attributes.
+
+**required**
+
+```php
+<?= $form->input(
+    name: 'name',
+    type: 'text',
+    attributes: [
+        'required',
+        'data-validation-messages' => [
+            'required' => 'The name field is required.',
+        ],
+    ]
+) ?>
+```
+
+**pattern**
+
+```php
+<?= $form->input(
+    name: 'name',
+    type: 'text',
+    attributes: [
+        'pattern' => '[a-zA-Z]+',
+        'data-validation-messages' => [
+            'pattern' => 'The name must only contain letters [a-zA-Z].',
+        ],
+    ]
+) ?>
+```
+
+**min/max/step**
+
+```php
+<?= $form->input(
+    name: 'name',
+    type: 'number',
+    attributes: [
+        'min' => '0',
+        'max' => '100',
+        'step' => '10',
+        'data-validation-messages' => [
+            'min' => 'The name must be at least 1.',
+            'max' => 'The name must be at most 100.',
+            'step' => 'The name must be in steps of 10.',
+        ],
+    ]
+) ?>
+```
+
+**minlength/maxlength**
+
+```php
+<?= $form->input(
+    name: 'name',
+    type: 'text',
+    attributes: [
+        'minlength' => '5',
+        'maxlength' => '10',
+        'data-validation-messages' => [
+            'minlength' => 'The name must be at least 5 letters long.',
+            'maxlength' => 'The name must be at most 10 letters long.',
+        ],
+    ]
+) ?>
+```
+
+**mismatch**
+
+The mismatch message will be displayed for type mismatches. See [ValidityState/typeMismatch](https://developer.mozilla.org/en-US/docs/Web/API/ValidityState/typeMismatch)
+
+```php
+<?= $form->input(
+    name: 'email',
+    type: 'email',
+    attributes: [
+        'minlength' => '5',
+        'maxlength' => '10',
+        'data-validation-messages' => [
+            'mismatch' => 'Please enter a valid email address.'
+        ],
+    ]
+) ?>
 ```
 
 # Credits
