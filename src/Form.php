@@ -249,7 +249,7 @@ class Form
                 $input = [$input];
             }
 
-            if (in_array($value, $input, true)) {
+            if (in_array($value, $input)) {
                 $attributes[] = 'checked';
                 
                 $this->activeElements?->add(
@@ -572,7 +572,7 @@ class Form
             $selected = [$selected];
         }
         
-        if (in_array($value, $selected, true)) {
+        if (in_array($value, $selected)) {
             $attributes[] = 'selected';
             
             if ($name) {
