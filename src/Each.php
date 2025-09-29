@@ -19,7 +19,7 @@ use ArrayIterator;
 use Traversable;
 
 /**
- * Each
+ * @implements IteratorAggregate<array-key, mixed>
  */
 class Each implements IteratorAggregate
 {
@@ -57,15 +57,10 @@ class Each implements IteratorAggregate
     /**
      * Get the iterator. 
      *
-     * @return Traversable
-     * @psalm-suppress all
+     * @return Traversable<array-key, mixed>
      */
     public function getIterator(): Traversable
     {
-        if (is_array($this->items())) {
-            return new ArrayIterator($this->items());
-        }
-
-        return $this->items();
+        return new ArrayIterator($this->items());
     }
 }
