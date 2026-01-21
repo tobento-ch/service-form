@@ -13,14 +13,12 @@ declare(strict_types=1);
 
 namespace Tobento\Service\Form;
 
+use Closure;
+use Stringable;
 use Tobento\Service\Message\HasMessages;
 use Tobento\Service\Message\MessagesInterface;
-use Stringable;
-use Closure;
+use Tobento\Service\Support\Htmlable;
 
-/**
- * Form
- */
 class Form
 {
     use HasMessages;
@@ -134,12 +132,12 @@ class Form
     /**
      * Generates a fieldset with the legend element. Important is to close it after with fieldsetClose().
      * 
-     * @param string $legend The legend text.
+     * @param string|Stringable $legend The legend text.
      * @param array $attributes Any attributes for the fieldset tag. For instance, ['class' => 'class-name']
      * @param array $legendAttributes Any attributes for the legend tag. For instance, ['class' => 'class-name']
      * @return string
      */
-    public function fieldset(string $legend, array $attributes = [], array $legendAttributes = []): string
+    public function fieldset(string|Stringable $legend, array $attributes = [], array $legendAttributes = []): string
     {
         return '<fieldset'.$this->formatAttributes($attributes).'><legend'
             .$this->formatAttributes($legendAttributes).'>'
@@ -159,20 +157,20 @@ class Form
     /**
      * Generates a label element.
      * 
-     * @param string $text The label text.
+     * @param string|Stringable $text The label text.
      * @param null|string $for The for attribute should be equal to the id attribute
      *     of the related element to bind them together.
      * @param array $attributes Any attributes. For instance, ['class' => 'class-name'],
-     * @param string $requiredText
-     * @param string $optionalText
+     * @param string|Stringable $requiredText
+     * @param string|Stringable $optionalText
      * @return string The label element based on the attributes set.
      */
     public function label(
-        string $text,
+        string|Stringable $text,
         null|string $for = null,
         array $attributes = [],
-        string $requiredText = '',
-        string $optionalText = '',
+        string|Stringable $requiredText = '',
+        string|Stringable $optionalText = '',
     ): string {
         
         if (!is_null($for)) {
@@ -181,9 +179,9 @@ class Form
             $this->activeElements?->add(
                 name: $for,
                 id: $attributes['for'],
-                label: $text,
+                label: (string) $text,
                 type: 'label',
-            );            
+            );
         }
         
         $html = $this->esc($text);
@@ -553,7 +551,7 @@ class Form
      * Generates option element. 
      *
      * @param string $value
-     * @param null|string $text
+     * @param null|string|Stringable $text
      * @param array $attributes
      * @param mixed $selected
      * @param null|string $name
@@ -561,7 +559,7 @@ class Form
      */
     public function option(
         string $value,
-        null|string $text = null,
+        null|string|Stringable $text = null,
         array $attributes = [],
         mixed $selected = null,
         null|string $name = null
@@ -580,7 +578,7 @@ class Form
                     name: $name,
                     id: $attributes['id'] ?? null,
                     value: $value,
-                    label: $text,
+                    label: $text !== null ? (string)$text : null,
                     type: 'option',
                     group: $this->nameToGroup($name, 'option'),
                 );
@@ -596,7 +594,7 @@ class Form
         $html .= '</option>';
         
         return $html;
-    }    
+    }
     
     /**
      * Generates a datalist.
@@ -627,12 +625,12 @@ class Form
     /**
      * Generates a button.
      * 
-     * @param string $text The text for the button.
+     * @param string|Stringable $text The text for the button.
      * @param array $attributes Any attributes. For instance, ['class' => 'class-name']
      * @param bool $escText True escaping text, otherwise not.
      * @return string
      */
-    public function button(string $text, array $attributes = [], bool $escText = true): string
+    public function button(string|Stringable $text, array $attributes = [], bool $escText = true): string
     {
         $attributes['type'] ??= 'submit';
         
@@ -640,7 +638,7 @@ class Form
             $text = $this->esc($text);
         }
         
-        return '<button'.$this->formatAttributes($attributes).'>'.$text.'</button>';
+        return '<button'.$this->formatAttributes($attributes).'>'.(string)$text.'</button>';
     }
 
     /**
@@ -987,12 +985,11 @@ class Form
         string $encoding = 'UTF-8',
         bool $double_encode = true
     ): string {
-        
-        if ($string instanceof Stringable) {
-            $string = $string->__toString();
+        if ($string instanceof Htmlable) {
+            return $string->toHtml();
         }
         
-        return htmlspecialchars($string, $flags, $encoding, $double_encode);
+        return htmlspecialchars((string) $string, $flags, $encoding, $double_encode);
     }
     
     /**
@@ -1014,9 +1011,14 @@ class Form
         }
         
         $value = is_scalar($key) ? (string)$key : '';
-        $label = is_scalar($item) ? (string)$item : (is_null($item) ? $item : $value);
-        $index = $index ?? null;
         
-        return [$value, $label, $index];
+        $label = match (true) {
+            is_scalar($item) => (string)$item,
+            $item instanceof \Stringable => $item,
+            is_null($item) => null,
+            default => $value,
+        };
+        
+        return [$value, $label, $index ?? null];
     }
 }
