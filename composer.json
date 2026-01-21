@@ -1,6 +1,6 @@
 {
     "name": "tobento/service-form",
-    "version": "2.0",
+    "version": "2.0.1",
     "type": "library",
     "description": "Building HTML forms easily.",
     "keywords": [
@@ -23,7 +23,8 @@
     "require": {
         "php": ">=8.4",
         "tobento/service-message": "^2.0",
-        "tobento/service-collection": "^2.0"    
+        "tobento/service-collection": "^2.0",
+        "tobento/service-support": "^2.0"
     },
     "suggest": {
         "tobento/service-session": "Required for using session tokenizer",
