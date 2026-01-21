@@ -10,6 +10,7 @@ Buliding HTML forms.
 - [Documentation](#documentation)
     - [Create Form](#create-form)
     - [Form Factory](#form-factory)
+    - [Stringable Support](#stringable-support)
     - [Form Elements](#form-elements)
         - [Form](#form)
         - [Input](#input)
@@ -118,6 +119,43 @@ $form = $formFactory->createForm();
 
 var_dump($form instanceof Form);
 // bool(true)
+```
+
+## Stringable Support
+
+All methods that output text - such as `label()`, `legend()`, `option()`, `radios()`, `checkboxes()`, and other - accept both:
+
+- `string`
+- any object implementing `Stringable` (including `HtmlString`)
+
+This allows you to pass rich, pre-escaped HTML content where appropriate.
+
+**HtmlString**
+
+Use `HtmlString` when you want to output HTML without escaping.
+
+```php
+use Tobento\Service\Support\HtmlString;
+
+echo $form->label(
+    text: new HtmlString('<i>Title</i>'),
+    for: 'title'
+);
+// <label for="title"><i>Title</i></label>
+```
+
+You can also use it in items for radios and checkboxes:
+
+```php
+use Tobento\Service\Support\HtmlString;
+
+echo $form->checkboxes(
+    name: 'colors',
+    items: ['red' => new HtmlString('<i>Red</i>')],
+    selected: ['blue'],
+    attributes: [],
+    labelAttributes: [],
+);
 ```
 
 ## Form Elements
@@ -337,11 +375,11 @@ $items = ['red' => 'Red', 'blue' => 'Blue'];
 
 | Parameter | Description |
 | --- | --- |
-| string **$text** | The label text. |
+| string\|Stringable **$text** | The label text. |
 | null\|string **$for** = null | The for attribute should be equal to the id attribute of the related element to bind them together. |
 | array **$attributes** = [] | Any attributes for the label element. For instance, ['class' => 'class-name'] |
-| string **$requiredText** = '' | Any required text. |
-| string **$optionalText** = '' | Any optional text. |
+| string\|Stringable **$requiredText** = '' | Any required text. |
+| string\|Stringable **$optionalText** = '' | Any optional text. |
 
 **with required text**
 
