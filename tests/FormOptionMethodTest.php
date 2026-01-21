@@ -16,10 +16,8 @@ namespace Tobento\Service\Form\Test;
 use PHPUnit\Framework\TestCase;
 use Tobento\Service\Form\Form;
 use Tobento\Service\Form\Input;
+use Tobento\Service\Support\HtmlString;
 
-/**
- * FormOptionMethodTest
- */
 class FormOptionMethodTest extends TestCase
 {
     public function testOption()
@@ -31,6 +29,19 @@ class FormOptionMethodTest extends TestCase
             $form->option(
                 value: 'red',
                 text: 'Red',
+            )
+        );
+    }
+    
+    public function testOptionWithHtmlStringText()
+    {
+        $form = new Form();
+        
+        $this->assertSame(
+            '<option value="red"><span>Red</span></option>',
+            $form->option(
+                value: 'red',
+                text: new HtmlString('<span>Red</span>'),
             )
         );
     }

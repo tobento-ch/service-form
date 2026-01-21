@@ -16,10 +16,8 @@ namespace Tobento\Service\Form\Test;
 use PHPUnit\Framework\TestCase;
 use Tobento\Service\Form\Form;
 use Tobento\Service\Form\Input;
+use Tobento\Service\Support\HtmlString;
 
-/**
- * FormButtonMethodTest
- */
 class FormButtonMethodTest extends TestCase
 {
     public function testButton()
@@ -30,6 +28,20 @@ class FormButtonMethodTest extends TestCase
             '<button type="submit">Submit Text</button>',
             $form->button(
                 text: 'Submit Text',
+                attributes: [],
+                escText: true,
+            )
+        );
+    }
+    
+    public function testButtonWithHtmlStringText()
+    {
+        $form = new Form();
+        
+        $this->assertSame(
+            '<button type="submit"><span>Text</span></button>',
+            $form->button(
+                text: new HtmlString('<span>Text</span>'),
                 attributes: [],
                 escText: true,
             )

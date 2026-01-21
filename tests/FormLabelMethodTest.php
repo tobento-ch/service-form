@@ -16,10 +16,8 @@ namespace Tobento\Service\Form\Test;
 use PHPUnit\Framework\TestCase;
 use Tobento\Service\Form\Form;
 use Tobento\Service\Form\Input;
+use Tobento\Service\Support\HtmlString;
 
-/**
- * FormLabelMethodTest
- */
 class FormLabelMethodTest extends TestCase
 {
     public function testLabel()
@@ -30,6 +28,18 @@ class FormLabelMethodTest extends TestCase
             '<label>text</label>',
             $form->label(
                 text: 'text',
+            )
+        );
+    }
+    
+    public function testLabelWithHtmlString()
+    {
+        $form = new Form();
+        
+        $this->assertSame(
+            '<label><span>text</span></label>',
+            $form->label(
+                text: new HtmlString('<span>text</span>'),
             )
         );
     }
@@ -94,7 +104,15 @@ class FormLabelMethodTest extends TestCase
                 text: 'text',
                 requiredText: '<p>Required</p>',
             )
-        );        
+        );
+        
+        $this->assertSame(
+            '<label>text<span class="required"><span>required</span></span></label>',
+            $form->label(
+                text: 'text',
+                requiredText: new HtmlString('<span>required</span>'),
+            )
+        );
     }
     
     public function testOptionalTextAttribute()
@@ -115,6 +133,14 @@ class FormLabelMethodTest extends TestCase
                 text: 'text',
                 optionalText: '<p>Optional</p>',
             )
-        );        
+        );
+        
+        $this->assertSame(
+            '<label>text<span class="optional"><span>optional</span></span></label>',
+            $form->label(
+                text: 'text',
+                optionalText: new HtmlString('<span>optional</span>'),
+            )
+        );
     }    
 }

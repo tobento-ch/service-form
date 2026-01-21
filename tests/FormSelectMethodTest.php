@@ -16,10 +16,8 @@ namespace Tobento\Service\Form\Test;
 use PHPUnit\Framework\TestCase;
 use Tobento\Service\Form\Form;
 use Tobento\Service\Form\Input;
+use Tobento\Service\Support\HtmlString;
 
-/**
- * FormSelectMethodTest
- */
 class FormSelectMethodTest extends TestCase
 {
     public function testSelect()
@@ -45,6 +43,19 @@ class FormSelectMethodTest extends TestCase
                 name: 'colors[]',
                 items: ['red' => 'Red', 'blue' => 'Blue'],
                 selectAttributes: ['multiple'],
+            )
+        );
+    }
+    
+    public function testSelectWithHtmlStringLabels()
+    {
+        $form = new Form();
+        
+        $this->assertSame(
+            '<select name="colors" id="colors"><option value="blue"><span>Blue</span></option></select>',
+            $form->select(
+                name: 'colors',
+                items: ['blue' => new HtmlString('<span>Blue</span>')],
             )
         );
     }

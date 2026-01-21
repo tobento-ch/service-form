@@ -16,10 +16,8 @@ namespace Tobento\Service\Form\Test;
 use PHPUnit\Framework\TestCase;
 use Tobento\Service\Form\Form;
 use Tobento\Service\Form\Input;
+use Tobento\Service\Support\HtmlString;
 
-/**
- * FormFieldsetMethodTest
- */
 class FormFieldsetMethodTest extends TestCase
 {
     public function testFieldset()
@@ -30,6 +28,20 @@ class FormFieldsetMethodTest extends TestCase
             '<fieldset><legend>Legend</legend>',
             $form->fieldset(
                 legend: 'Legend',
+                attributes: [],
+                legendAttributes: [],
+            )
+        );
+    }
+    
+    public function testFieldsetWithHtmlStringLegend()
+    {
+        $form = new Form();
+        
+        $this->assertSame(
+            '<fieldset><legend><span>Legend</span></legend>',
+            $form->fieldset(
+                legend: new HtmlString('<span>Legend</span>'),
                 attributes: [],
                 legendAttributes: [],
             )

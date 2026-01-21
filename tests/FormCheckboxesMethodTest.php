@@ -16,10 +16,8 @@ namespace Tobento\Service\Form\Test;
 use PHPUnit\Framework\TestCase;
 use Tobento\Service\Form\Form;
 use Tobento\Service\Form\Input;
+use Tobento\Service\Support\HtmlString;
 
-/**
- * FormCheckboxesMethodTest
- */
 class FormCheckboxesMethodTest extends TestCase
 {
     public function testCheckboxes()
@@ -31,6 +29,24 @@ class FormCheckboxesMethodTest extends TestCase
             $form->checkboxes(
                 name: 'colors',
                 items: ['red' => 'Red', 'blue' => 'Blue'],
+                selected: ['blue'],
+                attributes: [],
+                labelAttributes: [],
+                withInput: true,
+                wrapClass: 'form-wrap-checkbox'
+            )
+        );
+    }
+    
+    public function testCheckboxesWithHtmlStringLabels()
+    {
+        $form = new Form();
+        
+        $this->assertSame(
+            '<span class="form-wrap-checkbox"><input id="colors_1" name="colors[]" type="checkbox" value="blue" checked><label for="colors_1"><span>Blue</span></label></span>',
+            $form->checkboxes(
+                name: 'colors',
+                items: ['blue' => new HtmlString('<span>Blue</span>')],
                 selected: ['blue'],
                 attributes: [],
                 labelAttributes: [],
